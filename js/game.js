@@ -2,6 +2,8 @@
 // --------------- CONSTANTES --------------------
 const GRAVITY = 2;
 // ----------  variables auxiliares --------------
+var izq_1 = false; var der_1 = true;
+var izq_2 = true; var der_2 = false;
 var pos_actual1 = 0, ciclo1 = 0;
 var pos_actual2 = 0, ciclo2 = 0, incremento_width = 0;
 var ground_ref_ch_2;
@@ -34,7 +36,7 @@ var character2 = {
     src: "assets/walk2_trans.png",
     currentFrame: 0,
     frameCount: 6,
-    width: 47.5,
+    width: 51.4,
     height: 100,
     pos_x: 60,
     pos_y: 278,
@@ -172,6 +174,8 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
             */
             case 'a':   // PERSONAJE 1: estar quieto o desplazarse
                 // Si el personaje 1 está parado, sólo mostramos un frame
+                if(izq_1)   this.image.src = "assets/walk_left_1.PNG";
+                if(der_1)   this.image.src = "assets/personaje1transparente.PNG";
                 if(character1.parado){
                     this.currentFrame = this.currentFrame % this.frameCount; 
                     srx = this.currentFrame * this.width;
@@ -216,6 +220,8 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                 }
                 break;
             case 'd':   // PERSONAJE 2: estar quieto o desplazarse
+                if(izq_2)   {this.image.src = "assets/walk_2_left.PNG"; this.width = 51.4}
+                if(der_2)   {this.image.src = "assets/walk2_trans.png"; this.width = 47.5}
                 if(character2.parado){
                     this.currentFrame = this.currentFrame % this.frameCount; 
                     srx = this.currentFrame * this.width;
@@ -361,14 +367,14 @@ const updateGameArea = () => {
     character2.speedX = 0;
     character2.speedY = 0;
     /* ----------- Control de letras para mover al personaje nº 1 -------------  */
-    if (myGameArea.key && myGameArea.key == 37) {character1.speedX = -12; character1.parado = false}
-    if (myGameArea.key && myGameArea.key == 39) {character1.speedX = 12; character1.parado = false}
+    if (myGameArea.key && myGameArea.key == 37) {character1.speedX = -12; character1.parado = false; izq_1 = true; der_1 = false}
+    if (myGameArea.key && myGameArea.key == 39) {character1.speedX = 12; character1.parado = false; izq_1 = false; der_1 = true}
     if (myGameArea.key && myGameArea.key == 97) {character1.punch = true; character1.parado = true; character1.modo = 'b'}
     if (myGameArea.key && myGameArea.key == 40) {character1.modo = 'c'; character1.agachado = true}
     if (myGameArea.key && myGameArea.key == 38 && !character1.jumping) {character1.modo = 'h'; character1.jumping = true; character1.velocity = -20}
     /* ----------- Control de letras para mover al personaje nº 2 -------------  */
-    if (myGameArea.key && myGameArea.key == 65) {character2.speedX = -12; character2.parado = false}
-    if (myGameArea.key && myGameArea.key == 68) {character2.speedX = 12; character2.parado = false}
+    if (myGameArea.key && myGameArea.key == 65) {character2.speedX = -12; character2.parado = false; izq_2 = true; der_2 = false}
+    if (myGameArea.key && myGameArea.key == 68) {character2.speedX = 12; character2.parado = false; izq_2 = false; der_2 = true}
     if (myGameArea.key && myGameArea.key == 88) {character2.modo = 'e'; character2.patada = true}
     if (myGameArea.key && myGameArea.key == 83) {character2.modo = 'f'; character2.agachado = true}
     if (myGameArea.key && myGameArea.key == 87 && !character2.jumping) {character2.modo = 'g'; character2.jumping = true; character2.velocity = -20}
