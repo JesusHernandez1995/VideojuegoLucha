@@ -5,8 +5,16 @@ const GRAVITY = 2;
 var pos_actual1 = 0, ciclo1 = 0;
 var pos_actual2 = 0, ciclo2 = 0, incremento_width = 0;
 var ground_ref_ch_2;
+var game_over = false;
 // ---------------------------------
 var ground;
+
+var background = {
+    src: "assets/bg_frames/0.gif",
+    currentFrame: 0,
+    totalFrame: 8
+}
+
 var character1 = {
     src: "assets/personaje1transparente.PNG",
     currentFrame: 0,
@@ -18,7 +26,8 @@ var character1 = {
     agachado: false,
     jumping: false,
     velocity: 0,
-    modo: 'a'
+    modo: 'a',
+    health: 100
 }
 
 var character2 = {
@@ -34,7 +43,8 @@ var character2 = {
     agachado: false,
     jumping: false,
     velocity: 0,
-    modo: 'd'
+    modo: 'd',
+    health: 100
 }
 
 // It represents the game area, the canvas section
@@ -67,11 +77,17 @@ var myGameArea = {
 /* -------------------------------- FUNCIONES --------------------------------------- */
 const startGame = () => {
     myGameArea.start();
+    // ------------------ Dibujando o Creando los componentes -----------------
     // (imageWitdh, imageHeight, imagePath, x_position, y_position, type)
     ground = new StaticComponents(726, 54, "assets/ground.PNG", 0, 347, "image");
-    background = new StaticComponents(726, 348, "assets/bg_animated.gif", 0, 0, "image");
+    bg_music = new Sound("assets/Music/bg_music.m4a");
+    background = new DynamicComponents(726, 348, background.src, 0, 0, "image", background.currentFrame, background.totalFrame);
     character1 = new Characters(character1.width, character1.height, character1.src, 10, 290, "image", character1.currentFrame, character1.frameCount, 'a');
-    character2 = new Characters(character2.width, character2.height, character2.src, 60, 278, "image", character2.currentFrame, character2.frameCount, 'd');
+    character2 = new Characters(character2.width, character2.height, character2.src, 360, 278, "image", character2.currentFrame, character2.frameCount, 'd');
+    // ------------------ Setting important values before starting the game -------
+    character1.health = 100;
+    character2.health = 100;
+    bg_music.play();
 }
 
 // Función constructor
@@ -99,6 +115,37 @@ function StaticComponents (width, height, color, x, y, type) {
     }
 }
 
+// Función consctructor de la clase DynamicComponents
+function DynamicComponents (width, height, color, x, y, type, currentFrame, totalF) {
+    this.type = type;
+    if (type == "image") {
+        this.image = new Image();
+        this.image.src = color;
+    }
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;    
+    this.currentFrame = currentFrame;
+    this.totalF = totalF;
+    this.update = function(){
+        ctx = myGameArea.context;
+        if (type == "image") {
+            this.image.src = "assets/bg_frames/"+this.currentFrame+".gif";
+            this.currentFrame++;
+            if(this.currentFrame == this.totalF) {this.currentFrame = 0}
+            ctx.drawImage(this.image, 
+                this.x, 
+                this.y,
+                this.width, this.height);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+}
+
+// Función constructor de la clase Characters
 function Characters(width, height, source, x, y, type, currentFrame, frameCount, modo){
     this.type = type;
     if (type == "image") {
@@ -246,10 +293,62 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                 break;
         }
     }
+    // Función donde determinaremos si los personajes se han hecho daño, y actualizaremos barra de energía
+    this.getHurt = function(otherCharacter){
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherCharacter.x;
+        var otherright = otherCharacter.x + (otherCharacter.width);
+        var othertop = otherCharacter.y;
+        var otherbottom = otherCharacter.y + (otherCharacter.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) ||(myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
     this.newPos = function() {
         this.x += this.speedX;
         this.y += this.speedY;        
     }
+}
+
+// Función constructor para poner música de fondo
+function Sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.loop = true;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }    
+}
+
+// Función para dibujar la barra de energia
+const draw_healthbar = (x, y, health, width, thickness) => {
+    ctx = myGameArea.context;
+    ctx.beginPath();
+    ctx.rect(x-width/2, y, width*(health/100), thickness);
+    if(health > 63){
+        ctx.fillStyle="green"
+    }else if(health > 37){
+        ctx.fillStyle="gold"
+    }else if(health > 13){
+      ctx.fillStyle="orange";
+    }else{
+      ctx.fillStyle="red";
+    }
+    ctx.closePath();
+    ctx.fill();
+    if(health <= 0)     game_over = true;
 }
 
 // it will be called 50 times per second. It represents the game loop
@@ -276,6 +375,20 @@ const updateGameArea = () => {
     // ---------- Actualizar elementos estáticos ------------
     ground.update();
     background.update();
+    // ---------- Checamos si alguno de los personajes ha recibido algún daño ------------
+    if(character1.getHurt(character2))      character2.health--;
+    else{
+        // ---------- Dibujar Barra de salud (Health Bar) -------------
+        if(!game_over){
+            draw_healthbar(100,50, character1.health, 100, 10);  
+            draw_healthbar(620,50, character2.health, 100, 10); 
+        }
+    }
+    if(game_over){
+        if(character1.health <= 0)  alert("El personaje 1 ha perdido");
+        if(character2.health <= 0)  alert("El personaje 2 ha perdido");
+        myGameArea.stop();
+    }
     // ---------- Actualizar características personaje 1 -------------
     character1.newPos(); 
     character1.update();
