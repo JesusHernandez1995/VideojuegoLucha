@@ -13,7 +13,7 @@ var game_over = false;
 var ground;
 
 var background = {
-    src: "assets/bg_frames/0.gif",
+    src: "https://jesushernandez1995.github.io/VideojuegoLucha/assets/bg_frames/0.gif",
     currentFrame: 0,
     totalFrame: 8
 }
@@ -33,7 +33,7 @@ var bolafuego = {
 }
 
 var character1 = {
-    src: "assets/personaje1transparente.PNG",
+    src: "https://jesushernandez1995.github.io/VideojuegoLucha/assets/personaje1transparente.PNG",
     currentFrame: 0,
     frameCount: 3,
     width: 56,
@@ -48,7 +48,7 @@ var character1 = {
 }
 
 var character2 = {
-    src: "assets/walk2_trans.png",
+    src: "https://jesushernandez1995.github.io/VideojuegoLucha/assets/walk2_trans.png",
     currentFrame: 0,
     frameCount: 6,
     width: 51.4,
@@ -96,8 +96,8 @@ const startGame = () => {
     myGameArea.start();
     // ------------------ Dibujando o Creando los componentes -----------------
     // (imageWitdh, imageHeight, imagePath, x_position, y_position, type)
-    ground = new StaticComponents(726, 54, "assets/ground.PNG", 0, 347, "image");
-    bg_music = new Sound("assets/Music/bg_music.m4a");
+    ground = new StaticComponents(726, 54, "https://jesushernandez1995.github.io/VideojuegoLucha/assets/ground.PNG", 0, 347, "image");
+    bg_music = new Sound("https://jesushernandez1995.github.io/VideojuegoLucha/assets/Music/bg_music.m4a");
     background = new DynamicComponents(726, 348, background.src, 0, 0, "image", background.currentFrame, background.totalFrame);
     character1 = new Characters(character1.width, character1.height, character1.src, 10, 290, "image", character1.currentFrame, character1.frameCount, 'a');
     character2 = new Characters(character2.width, character2.height, character2.src, 360, 278, "image", character2.currentFrame, character2.frameCount, 'd');
@@ -148,7 +148,7 @@ function DynamicComponents (width, height, color, x, y, type, currentFrame, tota
     this.update = function(){
         ctx = myGameArea.context;
         if (type == "image") {
-            this.image.src = "assets/bg_frames/"+this.currentFrame+".gif";
+            this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/bg_frames/"+this.currentFrame+".gif";
             this.currentFrame++;
             if(this.currentFrame == this.totalF) {this.currentFrame = 0}
             ctx.drawImage(this.image, 
@@ -190,8 +190,8 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                 */
                 case 'a':   // PERSONAJE 1: estar quieto o desplazarse
                     // Si el personaje 1 está parado, sólo mostramos un frame
-                    if(izq_1)   this.image.src = "assets/walk_left_1.PNG";
-                    if(der_1)   this.image.src = "assets/personaje1transparente.PNG";
+                    if(izq_1)   this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/walk_left_1.PNG";
+                    if(der_1)   this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/personaje1transparente.PNG";
                     if(character1.parado){
                         this.currentFrame = this.currentFrame % this.frameCount; 
                         srx = this.currentFrame * this.width;
@@ -210,13 +210,13 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                     break;
                 case 'b':   // PERSONAJE 1: golpear con puño
                     if(character1.punch){
-                        if(pos_actual1 == 0)    this.image.src = "assets/punch_transparent1.PNG";
+                        if(pos_actual1 == 0)    this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/punch_transparent1.PNG";
                         pos_actual1 = ++pos_actual1 % 3;
                         srx = pos_actual1 * 60;
                         if(pos_actual1 == 2)     ciclo1++;     
                         if(ciclo1 == 2){
                             pos_actual1 = 0;
-                            this.image.src = "assets/personaje1transparente.PNG";
+                            this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/personaje1transparente.PNG";
                             character1.punch = false;
                             character1.modo = 'a';
                             ciclo1 = 0;
@@ -225,19 +225,19 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                     }
                     break;
                 case 'c':      // PERSONAJE 1: agacharse
-                    this.image.src = "assets/down1.PNG";
+                    this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/down1.PNG";
                     ctx.drawImage(this.image, 
                         this.x, 
                         335,
                         91, 42);
                     if(!character1.agachado)    {
-                        this.image.src = "assets/personaje1transparente.PNG";
+                        this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/personaje1transparente.PNG";
                         character1.modo = 'a';
                     }
                     break;
                 case 'd':   // PERSONAJE 2: estar quieto o desplazarse
-                    if(izq_2)   {this.image.src = "assets/walk_2_left.PNG"; this.width = 51.4}
-                    if(der_2)   {this.image.src = "assets/walk2_trans.png"; this.width = 47.5}
+                    if(izq_2)   {this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/walk_2_left.PNG"; this.width = 51.4}
+                    if(der_2)   {this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/walk2_trans.png"; this.width = 47.5}
                     if(character2.parado){
                         this.currentFrame = this.currentFrame % this.frameCount; 
                         srx = this.currentFrame * this.width;
@@ -255,13 +255,13 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                     }
                     break;
                 case 'e':   // PERSONAJE 2: golpear con patada
-                    if(pos_actual2 == 0)    this.image.src = "assets/patada_2trans.PNG";
+                    if(pos_actual2 == 0)    this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/patada_2trans.PNG";
                     pos_actual2 = ++pos_actual2 % 2;
                     srx = pos_actual2 * (64 + incremento_width);
                     if(pos_actual2 == 1)     {ciclo2++;  incremento_width = incremento_width + 20}   
                     if(ciclo2 == 2){
                         pos_actual2 = 0;
-                        this.image.src = "assets/walk2_trans.png";
+                        this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/walk2_trans.png";
                         character2.patada = false;
                         character2.modo = 'd';
                         incremento_width = 0;
@@ -270,19 +270,19 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                     ctx.drawImage(this.image, srx, 0, this.width, this.height, this.x, this.y, this.width, this.height);
                     break;
                 case 'f':   // PERSONAJE 2: agacharse
-                    this.image.src = "assets/tirarse_2_trans.PNG";
+                    this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/tirarse_2_trans.PNG";
                     ctx.drawImage(this.image, 
                         this.x, 
                         this.y + 15,
                         48, 77);
                     if(!character2.agachado)    {
-                        this.image.src = "assets/walk2_trans.png";
+                        this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/walk2_trans.png";
                         character2.modo = 'd';
                     }
                     break;
                 case 'g':
                     ground_ref_ch_2 = 290;    // valor escogido en base a la altura del personaje
-                    this.image.src = "assets/jump2_trans.PNG";
+                    this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/jump2_trans.PNG";
                     if (character2.jumping){
                         if( this.y + character2.velocity <= ground_ref_ch_2 ){
                             this.y += character2.velocity;
@@ -291,13 +291,13 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                             character2.velocity = 0;
                             character2.jumping = false;
                             character2.modo = 'd';
-                            this.image.src = "assets/walk2_trans.png";
+                            this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/walk2_trans.png";
                         }
                     }
                     ctx.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
                     break;
                 case 'h':
-                    this.image.src = "assets/jump1trans.PNG";
+                    this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/jump1trans.PNG";
                     if (character1.jumping){
                         if( this.y + character1.velocity <= 300 ){
                             this.y += character1.velocity;
@@ -306,7 +306,7 @@ function Characters(width, height, source, x, y, type, currentFrame, frameCount,
                             character1.velocity = 0;
                             character1.jumping = false;
                             character1.modo = 'a';
-                            this.image.src = "assets/personaje1transparente.PNG";
+                            this.image.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/personaje1transparente.PNG";
                         }
                     }
                     ctx.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
@@ -380,8 +380,8 @@ const throw_sword = (x, y, height, width, dir_left, dir_right) => {
     sword = new Image();
     ctx = myGameArea.context;
     if(!swordIsSet)     { espada.x = x; espada.y = y+15; swordIsSet = true}
-    if(dir_right)   {espada.x += 16; sword.src = "assets/sword.png"}
-    if(dir_left)    {espada.x -= 16; sword.src = "assets/sword_inverted.png"}
+    if(dir_right)   {espada.x += 16; sword.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/sword.png"}
+    if(dir_left)    {espada.x -= 16; sword.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/sword_inverted.png"}
     if((espada.x >= myGameArea.canvas.width) || (espada.x <= 0))  {
         swordIsSet = false; 
         character1.espada = false;
@@ -398,7 +398,7 @@ const throw_sword = (x, y, height, width, dir_left, dir_right) => {
  // Función para dibujar bola de fuego
 const throw_fireball = (x, y, w, h, dir_left, dir_right) => {
     fireball = new Image();
-    fireball.src = "assets/fireballs.png";
+    fireball.src = "https://jesushernandez1995.github.io/VideojuegoLucha/assets/fireballs.png";
     ctx = myGameArea.context;
     fireCurrentFrame_2 = ++fireCurrentFrame_2 % 8; 
     srx = fireCurrentFrame_2 * w;
